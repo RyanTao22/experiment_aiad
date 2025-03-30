@@ -58,7 +58,7 @@ def main():
 
     age = st.radio("Your Age Range", ['18-24', '25-44', '45-64', '65+'],index=None)
     gender = st.radio("Your Gender", ['Male', 'Female', 'Non-binary / Third gender'],index=None)
-    income = st.radio("Your Household Income Range Before Taxes During the Past 12 Months", ['<$25,000', '$25,000 - $150,000', '$150,000+'],index=None)
+    income = st.radio("Your Household Income Range Before Taxes During the Past 12 Months (US Dollar)", ['<25,000', '25,000 - 150,000', '150,000+'],index=None)
     ethnicity = st.radio("Your Ethnicity", ['American Indian and Alaska Native', 'Asian', 'Black or African American', 
                   'Native Hawaiian and Other Pacific Islander', 'White', 'Multiracial/Mixed ethnicity'],index=None)
 
