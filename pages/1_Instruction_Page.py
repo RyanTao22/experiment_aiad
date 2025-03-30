@@ -34,9 +34,6 @@ def main():
         - Do not close the browser during the study
         - You may withdraw anytime without penalty
 
-        ### Duration & Payment:
-        - Estimated time: 5-10 minutes
-        - Compensation: \$2-\$3 via Prolific within 2 weeks if you successfully complete the study
         """)
 
     # Comprehension check (only show if not passed)

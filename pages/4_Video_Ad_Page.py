@@ -12,7 +12,7 @@ def main():
     if 'watching_video' not in st.session_state:
         st.session_state.watching_video = False
 
-    st.warning("Please confirm your device is working properly and I will watch the entire video with sound.")
+    st.warning("Please confirm your device is working properly and you will watch the entire video with sound.")
     if st.button("I confirm - I will watch the complete video with sound"):
         st.session_state.page_load_time = time.time()
         st.video(st.session_state.data_dict["Video_url"])
