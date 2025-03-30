@@ -12,7 +12,7 @@ def main():
     st.write("To ensure a smooth experience, please check your audio and video devices before proceeding.")
 
     # Play test video (replace with your actual URL)
-    st.video("https://kling-mp4-us.oss-us-west-1.aliyuncs.com/device_check.mp4?OSSAccessKeyId=LTAI5tGhKeyY9jJE8ncCTyfv&Expires=2103337332&Signature=IX5o50sOmI%2BJt8tqBsWdxGXhQPM%3D")  # Should contain beach scene
+    st.video("https://kling-mp4-us.oss-us-west-1.aliyuncs.com/device_check.mp4?OSSAccessKeyId=LTAI5tGhKeyY9jJE8ncCTyfv&Expires=2103339672&Signature=iK3FIhZ31KMMFzlDbavG1cCtWhg%3D")  # Should contain beach scene
     
     st.divider()
     
