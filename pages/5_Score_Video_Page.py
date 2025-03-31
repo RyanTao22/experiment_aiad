@@ -17,7 +17,7 @@ def main():
     memorability = st.radio("Memorability (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
     effectiveness = st.radio("Effectiveness (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
 
-    if st.button("Save"):
+    if st.button("Submit Results", type="primary"):
         all_rated = True
         for metric in [satisfaction, accuracy, persuasiveness, credibility,
                      engagement, relevance, creativity, memorability, effectiveness]:

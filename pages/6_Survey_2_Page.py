@@ -114,7 +114,7 @@ def main():
         ],index=None
     )
     
-    if st.button("Save"):
+    if st.button("Submit to Complete the Study", type="primary"):
         all_rated = True
         for metric in [attn1, attn2, q1_7, q1_14, q2_10, q2_16, q1_2, q1_19, q2_1, q2_9]:
             if metric == None:

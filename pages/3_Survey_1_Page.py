@@ -25,7 +25,7 @@ def main():
         st.session_state.attn3_attempts = 0
         
 
-    st.subheader("Survey 1 - Part 2 (5 questions)")
+    st.subheader("Survey 1 (5 questions)")
 
     age = st.radio("Your Age Range", ['18-24', '25-44', '45-64', '65+'],index=None)
     gender = st.radio("Your Gender", ['Male', 'Female', 'Non-binary / Third gender'],index=None)
@@ -36,7 +36,7 @@ def main():
 
     # Privacy and Ethics Questions
  
-    if st.button("Submit Survey 1", type="primary"):
+    if st.button("Submit Results", type="primary"):
         all_rated = True
         for metric in [attn3,age,gender,income,ethnicity]:
             if metric == None:
