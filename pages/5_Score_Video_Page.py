@@ -7,15 +7,24 @@ def main():
 
     
 
-    satisfaction = st.radio("Satisfaction (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
-    accuracy = st.radio("Accuracy (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
-    persuasiveness = st.radio("Persuasiveness (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
-    credibility = st.radio("Credibility (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
-    engagement = st.radio("Engagement (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
-    relevance = st.radio("Relevance (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
-    creativity = st.radio("Creativity (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
-    memorability = st.radio("Memorability (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
-    effectiveness = st.radio("Effectiveness (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
+    # satisfaction = st.radio("Satisfaction (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
+    # accuracy = st.radio("Accuracy (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
+    # persuasiveness = st.radio("Persuasiveness (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
+    # credibility = st.radio("Credibility (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
+    # engagement = st.radio("Engagement (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
+    # relevance = st.radio("Relevance (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
+    # creativity = st.radio("Creativity (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
+    # memorability = st.radio("Memorability (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
+    # effectiveness = st.radio("Effectiveness (1 = Lowest, 10 = Highest)", options=list(range(1, 11)), horizontal=True,index=None)
+    satisfaction = st.slider("Satisfaction (1 = Lowest, 10 = Highest)", min_value=1, max_value=10, value=None)
+    accuracy = st.slider("Accuracy (1 = Lowest, 10 = Highest)", min_value=1, max_value=10, value=None)
+    persuasiveness = st.slider("Persuasiveness (1 = Lowest, 10 = Highest)", min_value=1, max_value=10, value=None)
+    credibility = st.slider("Credibility (1 = Lowest, 10 = Highest)", min_value=1, max_value=10, value=None)
+    engagement = st.slider("Engagement (1 = Lowest, 10 = Highest)", min_value=1, max_value=10, value=None)
+    relevance = st.slider("Relevance (1 = Lowest, 10 = Highest)", min_value=1, max_value=10, value=None)
+    creativity = st.slider("Creativity (1 = Lowest, 10 = Highest)", min_value=1, max_value=10, value=None)
+    memorability = st.slider("Memorability (1 = Lowest, 10 = Highest)", min_value=1, max_value=10, value=None)
+    effectiveness = st.slider("Effectiveness (1 = Lowest, 10 = Highest)", min_value=1, max_value=10, value=None)
 
     if st.button("Submit Results", type="primary"):
         all_rated = True
