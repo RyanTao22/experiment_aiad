@@ -1,32 +1,14 @@
 import streamlit as st
 from sqlalchemy import create_engine
 import pandas as pd
+import time
 
 def main():
-    st.markdown("""
-    <style>
-    .stRadio label {
-        font-size: 18px !important;
-    }
-    .stRadio > label:first-child {
-        font-size: 20px !important;
-        font-weight: bold !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
+    if 'attn_attempts' not in st.session_state:
+        st.session_state.attn_attempts = 0
     st.session_state.survey_2_complete = False
 
     st.subheader("Survey 2 - Part 1 (5 questions)")
-    q1_6 = st.radio(
-        "Which of these is not a best practice when trying to protect your privacy online?",
-        [
-            "Using a two-factor authentication to access account and devices",
-            "Storing your passwords in the notes section of your smartphone",
-            "Updating your operating system promptly when an update becomes available",
-            "Using different login information"
-        ],index=None
-    )
 
     q1_7 = st.radio(
         "If using an algorithm, can the results be biased against specific groups of people?",
@@ -46,6 +28,17 @@ def main():
             "Information people have shared on social media",
             "What would benefit society"
         ],index=None
+    )
+
+    attn1 = st.radio(
+        "To confirm you are paying attention, please select 'Strongly disagree' for this statement.",
+        [
+            "Strongly agree",
+            "Agree",
+            "Neutral",
+            "Strongly disagree" 
+        ],
+        index=None
     )
 
     q2_10 = st.radio(
@@ -69,9 +62,17 @@ def main():
     )
     st.divider()
 
-    # Technical Understanding Questions
     st.subheader("Survey 2 - Part 2 (5 questions)")
-    # st.subheader("Technical Understanding Questions")
+
+    attn2 = st.radio(
+        "According to the following instruction, what should you select here? Choose 'Green'.",
+        [
+            "Red",
+            "Green", 
+            "Blue"
+        ],
+        index=None
+    )
 
     q1_2 = st.radio(
         "Which technology is the primary enabler of Artificial Intelligence?",
@@ -112,20 +113,10 @@ def main():
             "Model evaluation"
         ],index=None
     )
-
-    q2_14 = st.radio(
-        "How can an AI system interact with the physical world?",
-        [
-            "By planning movements",
-            "By reacting to sensor inputs",
-            "By actuating motors",
-            "All of the above"
-        ],index=None
-    )
     
     if st.button("Save"):
         all_rated = True
-        for metric in [q1_6,q1_7,q1_14,q2_10,q2_16,q1_2,q1_19,q2_1,q2_9,q2_14]:
+        for metric in [attn1, attn2, q1_7, q1_14, q2_10, q2_16, q1_2, q1_19, q2_1, q2_9]:
             if metric == None:
                 all_rated = False
                 break
@@ -133,38 +124,38 @@ def main():
         if not all_rated:
             st.error("Please answer all questions before saving.") 
         else:
-            st.session_state.data_dict['table1_6'] = q1_6
-            st.session_state.data_dict['table1_7'] = q1_7
-            st.session_state.data_dict['table1_14'] = q1_14
-            st.session_state.data_dict['table2_10'] = q2_10
-            st.session_state.data_dict['table2_16'] = q2_16
-            st.session_state.data_dict['table1_2'] = q1_2
-            st.session_state.data_dict['table1_19'] = q1_19
-            st.session_state.data_dict['table2_1'] = q2_1
-            st.session_state.data_dict['table2_9'] = q2_9
-            st.session_state.data_dict['table2_14'] = q2_14
-            st.session_state.survey_2_complete = True
-
-            engine = create_engine(f'mysql+pymysql://{st.secrets["username"]}:{st.secrets["password"]}@{st.secrets["db_url"]}:{st.secrets["port"]}/{st.secrets["database"]}?charset=utf8mb4')
-            with engine.begin() as conn:
+            if attn1 == "Strongly disagree" and attn2 == "Green":  
+                if st.session_state.attn_attempts >= 2:  
+                    st.warning('You have failed to pass the Attention Checks. Thank you for your time. Please close the browser and return to Prolific.')
+                    st.stop()
                 
-                df = pd.DataFrame.from_dict([st.session_state.data_dict])
-                df.to_sql(name=st.secrets["db_table"], con=conn, if_exists='append', index=False)
+                st.session_state.data_dict['table1_7'] = q1_7
+                st.session_state.data_dict['table1_14'] = q1_14
+                st.session_state.data_dict['table2_10'] = q2_10
+                st.session_state.data_dict['table2_16'] = q2_16
+                st.session_state.data_dict['table1_2'] = q1_2
+                st.session_state.data_dict['table1_19'] = q1_19
+                st.session_state.data_dict['table2_1'] = q2_1
+                st.session_state.data_dict['table2_9'] = q2_9
+                
+                engine = create_engine(f'mysql+pymysql://{st.secrets["username"]}:{st.secrets["password"]}@{st.secrets["db_url"]}:{st.secrets["port"]}/{st.secrets["database"]}?charset=utf8mb4')
+                with engine.begin() as conn:
+                    df = pd.DataFrame.from_dict([st.session_state.data_dict])
+                    df.to_sql(name=st.secrets["db_table"], con=conn, if_exists='append', index=False)
+                
                 st.session_state.survey_2_complete = True
-            
-            if st.session_state.survey_2_complete:
-                st.success('You have already completed this survey. Please copy and keep your redeem code below, then return to Prolific.')
+                st.success('You have successfully completed this survey. Please copy and keep your redeem code below, then close the browser and return to Prolific.')
                 st.success("Your redeem code is: PFHQ-2X3F-4G5H")
                 st.balloons()
             else:
-                st.warning('Saving... Please do not close the browser')
-                
-            
-            
-
-            
-            st.write(st.session_state)
-            #st.switch_page("pages/4_Video_Ad_Page.py")
+                st.session_state.attn_attempts += 1
+                if st.session_state.attn_attempts >= 2:  # 只允许错误一次
+                    st.warning('You have failed to pass the Attention Checks. Thank you for your time. Please close the browser and return to Prolific.')
+                    st.stop()
+                else:
+                    st.error("Incorrect answer/answers detected. Please review your answers and try again.")
+                    time.sleep(2.5)
+                    st.rerun()
 
 if __name__ == "__main__":
     if 'score_video_complete' not in st.session_state or not st.session_state.score_video_complete:

@@ -29,10 +29,10 @@ def main():
 
 
         ### Important Rules:
-        - Pay close attention to all content and do not skip any questions
-        - If you meet any technical issues, please refresh the page to restart the study
-        - Do not close the browser during the study
-        - You may withdraw anytime without penalty
+         - Pay close attention; **Failing attention check or device check will disqualify you.**
+         - Do not close the browser or skip questions during the study.
+         - Refresh the page if you encounter technical issues.
+         - You may withdraw at any time without penalty.
 
         """)
 
@@ -55,10 +55,8 @@ def main():
         if st.button("Submit Answer"):
             if answer == "Answer questions about the video you just watched":
                 if st.session_state.attempts >= 2:
-                    st.error("""
-                    ❌ Thank you for your time. 
-                    Please return this study on Prolific by clicking 'Stop Without Completing'.
-                    """)
+                    st.warning('You have failed to pass the Comprehension Check too many times. Thank you for your time. Please close the browser and return to Prolific.')
+                    #st.warning("Your redeem code is: EFTR-9M3E-0I6T")
                     st.stop()
 
                 st.session_state.comp_check_passed = True
@@ -68,10 +66,9 @@ def main():
             else:
                 st.session_state.attempts += 1
                 if st.session_state.attempts >= 2:
-                    st.error("""
-                    ❌ Thank you for your time. 
-                    Please return this study on Prolific by clicking 'Stop Without Completing'.
-                    """)
+                    #st.warning('You have already completed the study. Please copy and keep your redeem code below, then close the browser and return to Prolific.')
+                    st.warning('You have failed to pass the Comprehension Check too many times. Thank you for your time. Please close the browser and return to Prolific.')
+                    #st.warning("Your redeem code is: EFTR-9M3E-0I6T")
                     st.stop()
                 else:
                     st.warning("Incorrect answer. Please review the instructions and try again.")
