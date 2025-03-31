@@ -18,7 +18,7 @@ def main():
         ### What You'll Do:
         1. **Take** a short survey about your demographics
         2. **Watch** a short video advertisements (1-3 minutes total)
-        3. **Answer questions** about your experience after each video
+        3. **Answer questions** about your experience and some additional topics after watching the video
 
 
         ### Important Rules:
