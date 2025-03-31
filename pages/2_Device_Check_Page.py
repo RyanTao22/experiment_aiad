@@ -4,12 +4,23 @@ def main():
     #st.show(st.session_state.product
     # st.write(st.session_state)
 
+    st.markdown(
+        """
+        <style>
+        .stRadio label {
+            font-size: 50px;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
     # Initialize test status
     if 'device_test_passed' not in st.session_state:
         st.session_state.device_test_passed = False
 
     st.title("Device Compatibility Test")
-    st.write("To ensure a smooth experience, please check your audio and video devices before proceeding.")
+    st.write("To ensure a smooth experience, please play the video to check your audio and video devices before proceeding.")
 
     # Play test video (replace with your actual URL)
     st.video("https://kling-mp4-us.oss-us-west-1.aliyuncs.com/device_check.mp4?OSSAccessKeyId=LTAI5tGhKeyY9jJE8ncCTyfv&Expires=2103339672&Signature=iK3FIhZ31KMMFzlDbavG1cCtWhg%3D")  # Should contain beach scene

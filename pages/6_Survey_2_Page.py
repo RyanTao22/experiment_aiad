@@ -3,7 +3,18 @@ from sqlalchemy import create_engine
 import pandas as pd
 
 def main():
-    st.divider()
+    st.markdown("""
+    <style>
+    .stRadio label {
+        font-size: 18px !important;
+    }
+    .stRadio > label:first-child {
+        font-size: 20px !important;
+        font-weight: bold !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
     st.session_state.survey_2_complete = False
 
     st.subheader("Survey 2 - Part 1 (5 questions)")
