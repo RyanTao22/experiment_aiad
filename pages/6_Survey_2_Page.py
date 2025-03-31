@@ -6,7 +6,7 @@ import time
 def main():
     if 'attn_attempts' not in st.session_state:
         st.session_state.attn_attempts = 0
-    st.session_state.survey_2_complete = False
+        st.session_state.survey_2_complete = False
 
     st.subheader("Survey 2 - Part 1 (5 questions)")
 
@@ -113,8 +113,11 @@ def main():
             "Model evaluation"
         ],index=None
     )
+
+   
     
     if st.button("Submit to Complete the Study", type="primary"):
+
         all_rated = True
         for metric in [attn1, attn2, q1_7, q1_14, q2_10, q2_16, q1_2, q1_19, q2_1, q2_9]:
             if metric == None:
@@ -137,19 +140,22 @@ def main():
                 st.session_state.data_dict['table1_19'] = q1_19
                 st.session_state.data_dict['table2_1'] = q2_1
                 st.session_state.data_dict['table2_9'] = q2_9
+
+                if not st.session_state.survey_2_complete:
+                    engine = create_engine(f'mysql+pymysql://{st.secrets["username"]}:{st.secrets["password"]}@{st.secrets["db_url"]}:{st.secrets["port"]}/{st.secrets["database"]}?charset=utf8mb4')
+                    with engine.begin() as conn:
+                        df = pd.DataFrame.from_dict([st.session_state.data_dict])
+                        df.to_sql(name=st.secrets["db_table"], con=conn, if_exists='append', index=False)
+                    st.session_state.survey_2_complete = True
+                    print('submitted')
                 
-                engine = create_engine(f'mysql+pymysql://{st.secrets["username"]}:{st.secrets["password"]}@{st.secrets["db_url"]}:{st.secrets["port"]}/{st.secrets["database"]}?charset=utf8mb4')
-                with engine.begin() as conn:
-                    df = pd.DataFrame.from_dict([st.session_state.data_dict])
-                    df.to_sql(name=st.secrets["db_table"], con=conn, if_exists='append', index=False)
-                
-                st.session_state.survey_2_complete = True
                 st.success('You have successfully completed this survey. Please copy and keep your redeem code below, then close the browser and return to Prolific.')
                 st.success("Your redeem code is: PFHQ-2X3F-4G5H")
                 st.balloons()
+                st.stop()
             else:
                 st.session_state.attn_attempts += 1
-                if st.session_state.attn_attempts >= 2:  # 只允许错误一次
+                if st.session_state.attn_attempts >= 2: 
                     st.warning('You have failed to pass the Attention Checks. Thank you for your time. Please close the browser and return to Prolific.')
                     st.stop()
                 else:
