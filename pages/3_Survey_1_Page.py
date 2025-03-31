@@ -109,8 +109,8 @@ def main():
                     st.stop()
                 else:
                     st.error("Incorrect answer detected. Please review all of your answers and try again.")
-                    time.sleep(2.5)
-                    st.rerun()  
+                    # time.sleep(2.5)
+                    # st.rerun()  
                     
                     #st.rerun()
 

@@ -153,9 +153,9 @@ def main():
                     st.warning('You have failed to pass the Attention Checks. Thank you for your time. Please close the browser and return to Prolific.')
                     st.stop()
                 else:
-                    st.error("Incorrect answer/answers detected. Please review your answers and try again.")
-                    time.sleep(2.5)
-                    st.rerun()
+                    st.error("Incorrect answer/answers detected. Please review all of your answers and try again.")
+                    # time.sleep(2.5)
+                    # st.rerun()
 
 if __name__ == "__main__":
     if 'score_video_complete' not in st.session_state or not st.session_state.score_video_complete:
