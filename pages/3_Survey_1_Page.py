@@ -94,6 +94,7 @@ def main():
                         "Script": script,
                         "Video_url": video_url,
                         "Video_time": video_time,
+                        "Prolific_ID": st.session_state.prolific_id,
                     }
                 
 

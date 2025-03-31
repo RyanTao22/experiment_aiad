@@ -1,19 +1,12 @@
 import streamlit as st
 
 def main():
-    # st.print(st.session_state)
-    # st.write(st.session_state)
-    # Page setup
-    # st.set_page_config(
-    #     page_title="Advertisement Study",
-    #     page_icon="📺",
-    #     layout="centered"
-    # )
 
     # Initialize session state
     if 'comp_check_passed' not in st.session_state:
         st.session_state.comp_check_passed = False
         st.session_state.attempts = 0
+        st.session_state.prolific_id = ""
 
     # Header
     st.title("Consumer Advertising Experience Study")
@@ -42,6 +35,10 @@ def main():
         st.subheader("Before you begin...")
         st.write("Please answer this question to continue:")
 
+        prolific_id = st.text_input("Please enter your Unique Prolific ID:", 
+                               value=st.session_state.prolific_id)
+            
+
         answer = st.radio(
             "What is your main task after watching each video?",
             options=[
@@ -59,9 +56,14 @@ def main():
                     #st.warning("Your redeem code is: EFTR-9M3E-0I6T")
                     st.stop()
 
-                st.session_state.comp_check_passed = True
-                st.success("✓ Correct! You may now begin the study.")
-                st.balloons()
+                if prolific_id:
+                    st.session_state.prolific_id = prolific_id
+                    st.session_state.comp_check_passed = True
+                    st.success("✓ Correct! You may now begin the study.")
+                    st.balloons()
+                else:
+                    st.warning("Please enter your Prolific ID to continue.")
+                    #st.snow()
                 #st.snow()
             else:
                 st.session_state.attempts += 1

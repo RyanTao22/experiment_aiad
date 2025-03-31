@@ -149,8 +149,8 @@ def main():
                     st.session_state.survey_2_complete = True
                     print('submitted')
                 
-                st.success('You have successfully completed this survey. Please copy and keep your redeem code below, then close the browser and return to Prolific.')
-                st.success("Your redeem code is: PFHQ-2X3F-4G5H")
+                st.success('Study completed successfully! Please click the link below to return to Prolific and finalize your submission, then close this browser.')
+                st.success(f"Completion URL: {st.secrets['completion_url']}")
                 st.balloons()
                 st.stop()
             else:
