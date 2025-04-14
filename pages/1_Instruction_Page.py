@@ -35,7 +35,7 @@ def main():
         st.subheader("Before you begin...")
         st.write("Please answer the following questions to continue:")
 
-        prolific_id = st.text_input("Please enter your Unique Prolific ID:", 
+        prolific_id = st.text_input("Please enter your Unique Prolific ID, then press Enter to apply:", 
                                value=st.session_state.prolific_id)
             
 

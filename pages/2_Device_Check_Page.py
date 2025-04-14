@@ -18,6 +18,7 @@ def main():
     # Initialize test status
     if 'device_test_passed' not in st.session_state:
         st.session_state.device_test_passed = False
+        st.session_state.device_attempts = 0
 
     st.title("Device Compatibility Test")
     st.write("To ensure a smooth experience, please play the video to check your audio and video devices before proceeding.")
@@ -46,15 +47,22 @@ def main():
     # Submit button
     if st.button("Submit Test Results"):
         if scene == "Beach" and letter == "z":
+            if st.session_state.device_attempts >= 2:
+                st.session_state.device_test_passed = False
+                st.warning('You have failed the device check too many times. Thank you for your time. Please close the browser and return to Prolific.')
+                st.stop()
             st.session_state.device_test_passed = True
             st.success("✅ Device test passed!")
-            # st.balloons()
-            # if st.button("Begin Main Study", type="primary"):
-            #     print('yes  yes')
-            #     st.switch_page("pages/3_Survey_Page.py")
+            
         else:
-            st.error("❌ Test failed. Please check your devices, replay the video and try again")
-            st.session_state.device_test_passed = False
+            st.session_state.device_attempts += 1
+            if st.session_state.device_attempts >= 2:
+                st.session_state.device_test_passed = False
+                st.warning('You have failed the device check too many times. Thank you for your time. Please close the browser and return to Prolific.')
+                st.stop()
+            else:
+                st.error("❌ Test failed. Please check your devices, replay the video and try again")
+                st.session_state.device_test_passed = False
 
     if st.session_state.device_test_passed:
         st.divider()
