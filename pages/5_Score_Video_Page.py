@@ -16,15 +16,21 @@ def main():
     }
     
     sliders = [
-        {"label": "Satisfaction", "key": "satisfaction"},
-        {"label": "Accuracy", "key": "accuracy"},
-        {"label": "Persuasiveness", "key": "persuasiveness"},
-        {"label": "Credibility", "key": "credibility"},
-        {"label": "Engagement", "key": "engagement"},
-        {"label": "Relevance", "key": "relevance"},
+        
+        # {"label": "Accuracy", "key": "accuracy"},
+       
+        
+        
+        
         {"label": "Creativity", "key": "creativity"},
         {"label": "Memorability", "key": "memorability"},
-        {"label": "Effectiveness", "key": "effectiveness"}
+        {"label": "Effectiveness", "key": "effectiveness"},
+
+        {"label": "Relevance", "key": "relevance"},
+        {"label": "Engagement", "key": "engagement"},
+        {"label": "Credibility", "key": "credibility"},
+        {"label": "Satisfaction", "key": "satisfaction"},
+        {"label": "Persuasiveness", "key": "persuasiveness"},
     ]
     
     if 'shuffled_sliders' not in st.session_state:
@@ -55,7 +61,7 @@ def main():
         #st.divider()
         
 
-    if st.button("Submit Results", type="primary"):
+    if st.button("Submit Assessment", type="primary"):
         if all(v is not None for v in slider_values.values()):
             st.session_state.data_dict.update(slider_values)
             st.session_state.score_video_complete = True
