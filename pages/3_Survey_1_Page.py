@@ -10,11 +10,10 @@ if 'product' not in st.session_state:
     st.session_state.product = 'Ice Cream Tub(Breyers)'
     print('product not in session state')
 if 'test_group' not in st.session_state:
-    st.session_state.test_group = 'inner_test_batch_1_icecream_all_demo'
-    # test_group = 'test_batch_1_icecream_all_demo'
-    # test_group = 'test_batch_1_icecream_one_demo'
-    # test_group = 'test_batch_1_icecream_no_demo'
-    # test_group = 'test_batch_1_icecream_huan_ad'
+    st.session_state.test_group = 'A1_icecream_all_demo'
+    # test_group = 'A2_icecream_one_demo'
+    # test_group = 'A3_icecream_no_demo'
+    # test_group = 'A4_icecream_human_ad'
 
 def main():
     # st.write(st.session_state)
