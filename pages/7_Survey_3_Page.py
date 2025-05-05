@@ -195,7 +195,7 @@ def main():
                     st.error("Incorrect answer/answers detected. Please review all of your answers and try again.")
 
 if __name__ == "__main__":
-    if 'ai_feeling_complete' not in st.session_state or not st.session_state.ai_feeling_complete:
+    if 'survey2_submitted' not in st.session_state or not st.session_state.survey2_submitted:
         st.switch_page("pages/6_Survey_2_Page.py")
     else:
         main()

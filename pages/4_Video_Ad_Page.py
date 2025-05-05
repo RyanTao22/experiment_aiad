@@ -26,7 +26,7 @@ def main():
                 st.switch_page("pages/5_Score_Video_Page.py")
             else:
                 st.session_state.video_finished = False
-                st.error("You havn't watched the video long enough. Please click the buttion 'I confirm - I will watch the complete video with sound' to watch the complete video again before proceeding.")
+                st.error("You haven't watched the video long enough. Please click the button 'I confirm - I will watch the complete video with sound' to watch the complete video again before proceeding.")
 
     # if st.session_state.video_finished == True:
     #     if st.button("Continue to Next Section", type="primary"):

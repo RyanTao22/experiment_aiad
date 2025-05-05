@@ -1,47 +1,45 @@
 import streamlit as st
+import random
 
 def main():
-    if 'ai_feeling_complete' not in st.session_state:
-        st.session_state.ai_feeling_complete = False
     if 'survey2_submitted' not in st.session_state:
         st.session_state.survey2_submitted = False
 
     st.subheader("Survey 2 (3 questions)")
 
-    score_descriptions_q1 = {
-        1: "Very Negative",
-        2: "Negative",
-        3: "Somewhat Negative",
-        4: "Neutral",
-        5: "Somewhat Positive",
-        6: "Positive",
-        7: "Very Positive"
+    score_descriptions = {
+        "ai_attitude": {
+            1: "Very Negative",
+            2: "Negative",
+            3: "Somewhat Negative",
+            4: "Neutral",
+            5: "Somewhat Positive",
+            6: "Positive",
+            7: "Very Positive"
+        },
+        "ai_probability": {
+            1: "Certainly Human",
+            2: "Likely Human",
+            3: "Possibly Human",
+            4: "Unsure",
+            5: "Possibly AI",
+            6: "Likely AI",
+            7: "Certainly AI"
+        },
+        "ai_ad_acceptance": {
+            1: "Completely Unacceptable",
+            2: "Strongly Opposed",
+            3: "Somewhat Opposed",
+            4: "Neutral",
+            5: "Somewhat Acceptable",
+            6: "Generally Acceptable",
+            7: "Completely Acceptable"
+        }
     }
     
-    score_descriptions_q2 = {
-        1: "Certainly Human",
-        2: "Likely Human",
-        3: "Possibly Human",
-        4: "Unsure",
-        5: "Possibly AI",
-        6: "Likely AI",
-        7: "Certainly AI"
-    }
-    
-    score_descriptions_q3 = {
-        1: "Completely Unacceptable",
-        2: "Strongly Opposed",
-        3: "Somewhat Opposed",
-        4: "Neutral",
-        5: "Somewhat Acceptable",
-        6: "Generally Acceptable",
-        7: "Completely Acceptable"
-    }
-    
-    def create_question(question_num, label, descriptions_dict, key):
-        #st.markdown(f"**Q{question_num}: {label}**")
+    def create_question(label, descriptions_dict, key):
         score = st.slider(
-            f"{label} ({1} = {descriptions_dict[1]}  |  4 = {descriptions_dict[4]}  |  7 = {descriptions_dict[7]})",
+            f"{label} (1 = {descriptions_dict[1]}  |  4 = {descriptions_dict[4]}  |  7 = {descriptions_dict[7]})",
             min_value=1,
             max_value=7,
             value=None,
@@ -52,43 +50,47 @@ def main():
         return score
     
     if not st.session_state.survey2_submitted:
-        # Question 1 - AI Attitude
-        q1_score = create_question(
-            1,
-            "What is your overall attitude towards AI technology?",
-            score_descriptions_q1,
-            "q1_ai_attitude"
-        )
+        # 定义问题列表
+        questions = [
+            {
+                "label": "What is your overall attitude towards AI technology?",
+                "key": "ai_attitude",
+                "descriptions": score_descriptions["ai_attitude"]
+            },
+            {
+                "label": "How likely was this advertisement Human-generated or AI-generated?",
+                "key": "ai_probability",
+                "descriptions": score_descriptions["ai_probability"]
+            },
+            {
+                "label": "How acceptable do you find AI-generated advertising?",
+                "key": "ai_ad_acceptance",
+                "descriptions": score_descriptions["ai_ad_acceptance"]
+            }
+        ]
         
-        #st.divider()
+        # 只在第一次运行时打乱问题顺序
+        if 'shuffled_survey2_questions' not in st.session_state:
+            shuffled_questions = questions.copy()
+            random.shuffle(shuffled_questions)
+            st.session_state.shuffled_survey2_questions = shuffled_questions
         
-        # Question 2 - AI Probability
-        q2_score = create_question(
-            2,
-            "How likely was this advertisement Human-generated or AI-generated?",
-            score_descriptions_q2,
-            "q2_ai_probability"
-        )
+        # 存储答案的字典
+        answers = {}
         
-        #st.divider()
-        
-        # Question 3 - AI Acceptance
-        q3_score = create_question(
-            3,
-            "How acceptable do you find AI-generated advertising?",
-            score_descriptions_q3,
-            "q3_ai_acceptance"
-        )
+        # 显示随机化后的问题
+        for q in st.session_state.shuffled_survey2_questions:
+            score = create_question(
+                q["label"],
+                q["descriptions"],
+                q["key"]
+            )
+            answers[q["key"]] = score
         
         # Submission section
         if st.button("Submit Assessment", type="primary"):
-            if None not in [q1_score, q2_score, q3_score]:
-                st.session_state.data_dict.update({
-                    'ai_attitude': q1_score,
-                    'ai_probability': q2_score,
-                    'ai_ad_acceptance': q3_score
-                })
-                st.session_state.ai_feeling_complete = True
+            if None not in answers.values():
+                st.session_state.data_dict.update(answers)
                 st.session_state.survey2_submitted = True
                 st.success("Responses recorded successfully!")
                 st.switch_page("pages/7_Survey_3_Page.py")
@@ -100,7 +102,7 @@ def main():
             st.switch_page("pages/7_Survey_3_Page.py")
 
 if __name__ == "__main__":
-    if 'score_video_complete' not in st.session_state or not st.session_state.score_video_complete:
+    if 'score_submitted' not in st.session_state or not st.session_state.score_submitted:
         st.switch_page("pages/5_Score_Video_Page.py")
     else:
         main()
