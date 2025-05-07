@@ -27,13 +27,13 @@ def main():
             7: "Certainly AI"
         },
         "ai_ad_acceptance": {
-            1: "Completely Unacceptable",
-            2: "Strongly Opposed",
-            3: "Somewhat Opposed",
+            1: "Very Unacceptable",
+            2: "Unacceptable",
+            3: "Somewhat Unacceptable",
             4: "Neutral",
             5: "Somewhat Acceptable",
-            6: "Generally Acceptable",
-            7: "Completely Acceptable"
+            6: "Acceptable",
+            7: "Very Acceptable"
         }
     }
     
