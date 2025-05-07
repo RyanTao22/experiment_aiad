@@ -60,10 +60,90 @@ def main():
                 "Code readability"
             ],
             "key": "q2_16"
+        },
+        {
+            "question": "Which technology allows multiple parties to collaboratively train an AI model without sharing users' raw data, thereby protecting data privacy?",
+            "options": [
+                "Supervised Learning",
+                "Ensemble Learning",
+                "Federated Learning",
+                "Reinforcement Learning"
+            ],
+            "key": "ryan1_1"
+        },
+        {
+            "question": "An important measure for AI governance and regulation is:",
+            "options": [
+                "Relying entirely on corporate self-regulation without external oversight",
+                "Prohibiting any use of user data in AI applications",
+                "Conducting algorithmic audits and enhancing transparency for high-risk AI systems",
+                "Requiring all AI algorithm details to be kept absolutely secret from the public"
+            ],
+            "key": "ryan1_2"
+        },
+        {
+            "question": "What is a potential misuse risk of open-source large AI models?",
+            "options": [
+                "Allowing commercial companies to use them freely, undermining original developers' rights",
+                "Models being used to generate misinformation or harmful content due to lack of usage restrictions",
+                "Limited adoption due to non-user-friendly interfaces",
+                "Low algorithm transparency prevents independent safety reviews"
+            ],
+            "key": "ryan1_3"
+        },
+        {
+            "question": "After data anonymization, does privacy leakage risk still exist?",
+            "options": [
+                "Risk exists only if data includes high-precision geolocation or biometric information",
+                "Yes, anonymized data can still be re-identified by combining with other datasets",
+                "No, anonymization removes all personal identifiers",
+                "No, laws explicitly state anonymized data cannot be traced"
+            ],
+            "key": "ryan1_4"
         }
     ]
 
     questions_part2 = [
+        {
+            "question": "Which mechanism enables Transformer models to solve the long-range dependency problem in traditional RNNs?",
+            "options": [
+                "Genetic Algorithms",
+                "Self-attention Mechanism",
+                "Long Short-Term Memory (LSTM) Units",
+                "Convolutional Kernels"
+            ],
+            "key": "ryan2_1"
+        },
+        {
+            "question": "What technical principle does current text-to-image models like DALL-E 2 and Stable Diffusion primarily use?",
+            "options": [
+                "Generative Adversarial Networks (GANs)",
+                "Ensemble Learning",
+                "Diffusion Models",
+                "Reinforcement Learning"
+            ],
+            "key": "ryan2_2"
+        },
+        {
+            "question": "Which open-source platform shares pretrained models and NLP tools?",
+            "options": [
+                "Apache Spark",
+                "Hugging Face",
+                "TensorFlow",
+                "Kaggle"
+            ],
+            "key": "ryan2_3"
+        },
+        {
+            "question": "With sufficient data, what typically occurs when a deep learning model's parameters increase significantly (e.g., from 100M to 10B)?",
+            "options": [
+                "Reduced computational resources and storage requirements",
+                "Lower demands for testing data quality",
+                "Potentially significant improvements in model expressiveness and generalization",
+                "Elimination of the need for regularization"
+            ],
+            "key": "ryan2_4"
+        },
         {
             "question": "According to the following instruction, what should you select here? Choose 'Green'.",
             "options": [
@@ -129,7 +209,7 @@ def main():
             random.shuffle(q["options"])
         st.session_state.shuffled_questions_part2 = shuffled_part2
 
-    st.subheader("Survey 3 - Part 1 (5 questions)")
+    st.subheader("Survey 3 - Part 1 (9 questions)")
     answers_part1 = {}
     for question in st.session_state.shuffled_questions_part1:
         answer = st.radio(
@@ -142,7 +222,7 @@ def main():
 
     st.divider()
 
-    st.subheader("Survey 3 - Part 2 (5 questions)")
+    st.subheader("Survey 3 - Part 2 (9 questions)")
     answers_part2 = {}
     for question in st.session_state.shuffled_questions_part2:
         answer = st.radio(
@@ -173,6 +253,15 @@ def main():
                 st.session_state.data_dict['table1_19'] = all_answers["q1_19"]
                 st.session_state.data_dict['table2_1'] = all_answers["q2_1"]
                 st.session_state.data_dict['table2_9'] = all_answers["q2_9"]
+                
+                st.session_state.data_dict['ryan1_1'] = all_answers["ryan1_1"]
+                st.session_state.data_dict['ryan1_2'] = all_answers["ryan1_2"]
+                st.session_state.data_dict['ryan1_3'] = all_answers["ryan1_3"]
+                st.session_state.data_dict['ryan1_4'] = all_answers["ryan1_4"]
+                st.session_state.data_dict['ryan2_1'] = all_answers["ryan2_1"]
+                st.session_state.data_dict['ryan2_2'] = all_answers["ryan2_2"]
+                st.session_state.data_dict['ryan2_3'] = all_answers["ryan2_3"]
+                st.session_state.data_dict['ryan2_4'] = all_answers["ryan2_4"]
 
                 if not st.session_state.survey_2_complete:
                     engine = create_engine(f'mysql+pymysql://{st.secrets["username"]}:{st.secrets["password"]}@{st.secrets["db_url"]}:{st.secrets["port"]}/{st.secrets["database"]}?charset=utf8mb4')
