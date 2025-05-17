@@ -74,9 +74,20 @@ def main():
         }
     }
 
+    score_explanations = {
+        "engagement": "How boring or interesting was this ad to you?",
+        "credibility": "How trustworthy did you find the information in this ad?",
+        "persuasiveness": "Did this ad effectively persuade you to consider its message or recommendation?",
+        "creativity": "How familiar or novel did you find this advertisement's idea?",
+        "effectiveness": "After seeing this ad, how likely are you to purchase the promoted product?",
+        "quality": "How would you rate the overall quality of this ad?",
+        "relevance": "How relevant was this ad's content to your needs or interests?"
+    }
+
     def create_question(label, descriptions_dict, key):
         score = st.slider(
-            f"{label} (1 = {descriptions_dict[1]}  |  4 = {descriptions_dict[4]}  |  7 = {descriptions_dict[7]})",
+            f"""{score_explanations[key]} ({label})
+            \n(1 = {descriptions_dict[1]}  |  4 = {descriptions_dict[4]}  |  7 = {descriptions_dict[7]})""",
             min_value=1,
             max_value=7,
             value=None,
@@ -84,6 +95,10 @@ def main():
         )
         if score is not None:
             st.caption(f"Selected {score} - {descriptions_dict[score]}")
+        
+        # 使用新的解释性文字字典
+        
+            
         return score
     
     if not st.session_state.score_submitted:

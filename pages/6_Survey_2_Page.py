@@ -1,11 +1,10 @@
 import streamlit as st
-import random
 
 def main():
     if 'survey2_submitted' not in st.session_state:
         st.session_state.survey2_submitted = False
 
-    st.subheader("Survey 2 (3 questions)")
+    st.subheader("Survey 2 (4 questions)")
 
     score_descriptions = {
         "ai_attitude": {
@@ -34,12 +33,22 @@ def main():
             5: "Somewhat Acceptable",
             6: "Acceptable",
             7: "Very Acceptable"
+        },
+        "ai_ad_personalized_acceptance": {
+            1: "Very Unacceptable",
+            2: "Unacceptable",
+            3: "Somewhat Unacceptable",
+            4: "Neutral",
+            5: "Somewhat Acceptable",
+            6: "Acceptable",
+            7: "Very Acceptable"
         }
     }
     
     def create_question(label, descriptions_dict, key):
         score = st.slider(
-            f"{label} (1 = {descriptions_dict[1]}  |  4 = {descriptions_dict[4]}  |  7 = {descriptions_dict[7]})",
+            f"""{label} 
+            \n(1 = {descriptions_dict[1]}  |  4 = {descriptions_dict[4]}  |  7 = {descriptions_dict[7]})""",
             min_value=1,
             max_value=7,
             value=None,
@@ -66,20 +75,19 @@ def main():
                 "label": "How acceptable do you find AI-generated advertising?",
                 "key": "ai_ad_acceptance",
                 "descriptions": score_descriptions["ai_ad_acceptance"]
+            },
+            {
+                "label": "How acceptable do you find AI-generated advertisements that are personalized based on your demographics?",
+                "key": "ai_ad_personalized_acceptance",
+                "descriptions": score_descriptions["ai_ad_personalized_acceptance"]
             }
         ]
-        
-        # 只在第一次运行时打乱问题顺序
-        if 'shuffled_survey2_questions' not in st.session_state:
-            shuffled_questions = questions.copy()
-            random.shuffle(shuffled_questions)
-            st.session_state.shuffled_survey2_questions = shuffled_questions
         
         # 存储答案的字典
         answers = {}
         
-        # 显示随机化后的问题
-        for q in st.session_state.shuffled_survey2_questions:
+        # 显示问题
+        for q in questions:
             score = create_question(
                 q["label"],
                 q["descriptions"],
