@@ -4,6 +4,7 @@ import pytz
 import pandas as pd
 import ast
 import time
+from sqlalchemy import create_engine
 #from helpers import add_row_to_responses_df, initialize_responses_df
 
 if 'product' not in st.session_state:
@@ -48,8 +49,17 @@ def main():
         # Validate attention check
             if attn3 in ["Disagree"]:
                 if st.session_state.attn3_attempts >= 2:
+                    # 记录失败状态到数据库
+                    engine = create_engine(f'mysql+pymysql://{st.secrets["username"]}:{st.secrets["password"]}@{st.secrets["db_url"]}:{st.secrets["port"]}/{st.secrets["database"]}?charset=utf8mb4')
+                    with engine.begin() as conn:
+                        df = pd.DataFrame([{
+                            'prolific_id': st.session_state.prolific_id,
+                            'status': 'failed',
+                            'reason': 'attention_check'
+                        }])
+                        df.to_sql(name=st.secrets["db_check_user"], con=conn, if_exists='append', index=False)
+                    
                     st.warning('You have failed to pass the Attention Check too many times. Thank you for your time. Please close the browser and return to Prolific.')
-                    #st.warning("Your redeem code is: EFTR-9M3E-1H4L")
                     st.stop()
                 
                 LA_time = datetime.datetime.now(pytz.timezone('America/Los_Angeles')).strftime('%Y-%m-%d %H:%M:%S')
@@ -104,8 +114,17 @@ def main():
             else:
                 st.session_state.attn3_attempts += 1
                 if st.session_state.attn3_attempts >= 2:
+                    # 记录失败状态到数据库
+                    engine = create_engine(f'mysql+pymysql://{st.secrets["username"]}:{st.secrets["password"]}@{st.secrets["db_url"]}:{st.secrets["port"]}/{st.secrets["database"]}?charset=utf8mb4')
+                    with engine.begin() as conn:
+                        df = pd.DataFrame([{
+                            'prolific_id': st.session_state.prolific_id,
+                            'status': 'failed',
+                            'reason': 'attention_check'
+                        }])
+                        df.to_sql(name=st.secrets["db_check_user"], con=conn, if_exists='append', index=False)
+                    
                     st.warning('You have failed to pass the Attention Check too many times. Thank you for your time. Please close the browser and return to Prolific.')
-                    #st.warning("Your redeem code is: EFTR-9M3E-1H4L")
                     st.stop()
                 else:
                     st.error("Incorrect answer detected. Please review all of your answers and try again.")

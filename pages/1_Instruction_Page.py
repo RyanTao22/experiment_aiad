@@ -1,4 +1,6 @@
 import streamlit as st
+from sqlalchemy import create_engine, text
+import pandas as pd
 
 def main():
 
@@ -50,37 +52,66 @@ def main():
         )
 
         if st.button("Submit Answer"):
-            if answer == "Answer questions about the video you just watched":
-                if st.session_state.attempts >= 2:
-                    st.warning('You have failed to pass the Comprehension Check too many times. Thank you for your time. Please close the browser and return to Prolific.')
-                    #st.warning("Your redeem code is: EFTR-9M3E-0I6T")
-                    st.stop()
+            if prolific_id:
+                # 检查prolific_id是否在db_check_user表中
+                engine = create_engine(f'mysql+pymysql://{st.secrets["username"]}:{st.secrets["password"]}@{st.secrets["db_url"]}:{st.secrets["port"]}/{st.secrets["database"]}?charset=utf8mb4')
+                with engine.connect() as conn:
+                    query = text(f"SELECT reason FROM {st.secrets['db_check_user']} WHERE prolific_id = :prolific_id")
+                    result = conn.execute(query, {"prolific_id": prolific_id}).fetchone()
+                    
+                    if result:
+                        reason = result[0]
+                        reason_text = {
+                            'comprehension_check': 'failed to pass the Comprehension Check',
+                            'device_check': 'failed to pass the Device Check',
+                            'attention_check': 'failed to pass the Attention Check'
+                        }.get(reason, 'failed to meet the study requirements')
+                        
+                        st.error(f"This Prolific ID has been disqualified from the study because you {reason_text} too many times. Please close the browser and return to Prolific.")
+                        st.stop()
 
-                if prolific_id:
+                if answer == "Answer questions about the video you just watched":
+                    if st.session_state.attempts >= 2:
+                        # 记录失败状态到数据库
+                        with engine.begin() as conn:
+                            df = pd.DataFrame([{
+                                'prolific_id': prolific_id,
+                                'status': 'failed',
+                                'reason': 'comprehension_check'
+                            }])
+                            df.to_sql(name=st.secrets["db_check_user"], con=conn, if_exists='append', index=False)
+                        
+                        st.warning('You have failed to pass the Comprehension Check too many times. Thank you for your time. Please close the browser and return to Prolific.')
+                        st.stop()
+
                     st.session_state.prolific_id = prolific_id
                     st.session_state.comp_check_passed = True
                     st.success("✓ Correct! You may now begin the study.")
                     st.balloons()
                 else:
-                    st.warning("Please enter your Prolific ID to continue.")
-                    #st.snow()
-                #st.snow()
+                    st.session_state.attempts += 1
+                    if st.session_state.attempts >= 2:
+                        # 记录失败状态到数据库
+                        with engine.begin() as conn:
+                            df = pd.DataFrame([{
+                                'prolific_id': prolific_id,
+                                'status': 'failed',
+                                'reason': 'comprehension_check'
+                            }])
+                            df.to_sql(name=st.secrets["db_check_user"], con=conn, if_exists='append', index=False)
+                        
+                        st.warning('You have failed to pass the Comprehension Check too many times. Thank you for your time. Please close the browser and return to Prolific.')
+                        st.stop()
+                    else:
+                        st.warning("Incorrect answer. Please review the instructions and try again.")
             else:
-                st.session_state.attempts += 1
-                if st.session_state.attempts >= 2:
-                    #st.warning('You have already completed the study. Please copy and keep your redeem code below, then close the browser and return to Prolific.')
-                    st.warning('You have failed to pass the Comprehension Check too many times. Thank you for your time. Please close the browser and return to Prolific.')
-                    #st.warning("Your redeem code is: EFTR-9M3E-0I6T")
-                    st.stop()
-                else:
-                    st.warning("Incorrect answer. Please review the instructions and try again.")
+                st.warning("Please enter your Prolific ID to continue.")
 
     # Continue button (only shows after passing)
     if st.session_state.comp_check_passed:
         st.divider()
         if st.button("Let's Go!", type="primary"):
-            # Replace with your study flow logic
-            st.switch_page("pages/2_Device_Check_Page.py")  
+            st.switch_page("pages/2_Device_Check_Page.py")
 
 if __name__ == "__main__":
     main()

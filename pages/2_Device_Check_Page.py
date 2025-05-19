@@ -1,4 +1,6 @@
 import streamlit as st
+from sqlalchemy import create_engine
+import pandas as pd
 
 def main():
     #st.show(st.session_state.product
@@ -49,6 +51,16 @@ def main():
         if scene == "Beach" and letter == "z":
             if st.session_state.device_attempts >= 2:
                 st.session_state.device_test_passed = False
+                # 记录失败状态到数据库
+                engine = create_engine(f'mysql+pymysql://{st.secrets["username"]}:{st.secrets["password"]}@{st.secrets["db_url"]}:{st.secrets["port"]}/{st.secrets["database"]}?charset=utf8mb4')
+                with engine.begin() as conn:
+                    df = pd.DataFrame([{
+                        'prolific_id': st.session_state.prolific_id,
+                        'status': 'failed',
+                        'reason': 'device_check'
+                    }])
+                    df.to_sql(name=st.secrets["db_check_user"], con=conn, if_exists='append', index=False)
+                
                 st.warning('You have failed the device check too many times. Thank you for your time. Please close the browser and return to Prolific.')
                 st.stop()
             st.session_state.device_test_passed = True
@@ -58,6 +70,16 @@ def main():
             st.session_state.device_attempts += 1
             if st.session_state.device_attempts >= 2:
                 st.session_state.device_test_passed = False
+                # 记录失败状态到数据库
+                engine = create_engine(f'mysql+pymysql://{st.secrets["username"]}:{st.secrets["password"]}@{st.secrets["db_url"]}:{st.secrets["port"]}/{st.secrets["database"]}?charset=utf8mb4')
+                with engine.begin() as conn:
+                    df = pd.DataFrame([{
+                        'prolific_id': st.session_state.prolific_id,
+                        'status': 'failed',
+                        'reason': 'device_check'
+                    }])
+                    df.to_sql(name=st.secrets["db_check_user"], con=conn, if_exists='append', index=False)
+                
                 st.warning('You have failed the device check too many times. Thank you for your time. Please close the browser and return to Prolific.')
                 st.stop()
             else:
@@ -67,7 +89,6 @@ def main():
     if st.session_state.device_test_passed:
         st.divider()
         if st.button("Begin Main Study", type="primary"):
-            # Replace with your study flow logic
             st.switch_page("pages/3_Survey_1_Page.py")
 
 if __name__ == "__main__":
