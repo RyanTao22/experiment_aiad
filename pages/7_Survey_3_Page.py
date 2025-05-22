@@ -268,8 +268,16 @@ def main():
                     with engine.begin() as conn:
                         df = pd.DataFrame.from_dict([st.session_state.data_dict])
                         df.to_sql(name=st.secrets["db_table"], con=conn, if_exists='append', index=False)
+
+                        df_user = pd.DataFrame([{
+                                'prolific_id': st.session_state.prolific_id,
+                                'status': 'completed',
+                                'reason': 'completed the study'
+                            }])
+                        df_user.to_sql(name=st.secrets["db_check_user"], con=conn, if_exists='append', index=False)
                     st.session_state.survey_2_complete = True
                     print('submitted')
+
                 
                 st.success('Study completed successfully! Please click the link below to return to Prolific and finalize your submission, then close this browser.')
                 st.success(f"Completion URL: {st.secrets['completion_url']}")

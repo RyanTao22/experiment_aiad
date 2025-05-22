@@ -62,12 +62,13 @@ def main():
                     if result:
                         reason = result[0]
                         reason_text = {
-                            'comprehension_check': 'failed to pass the Comprehension Check',
-                            'device_check': 'failed to pass the Device Check',
-                            'attention_check': 'failed to pass the Attention Check'
+                            'comprehension_check': 'failed to pass the Comprehension Check too many times',
+                            'device_check': 'failed to pass the Device Check too many times',
+                            'attention_check': 'failed to pass the Attention Check too many times',
+                            'completed the study': 'have completed the study already',
                         }.get(reason, 'failed to meet the study requirements')
                         
-                        st.error(f"This Prolific ID has been disqualified from the study because you {reason_text} too many times. Please close the browser and return to Prolific.")
+                        st.error(f"This Prolific ID has been disqualified from the study because you {reason_text}. Please close the browser and return to Prolific.")
                         st.stop()
 
                 if answer == "Answer questions about the video you just watched":
