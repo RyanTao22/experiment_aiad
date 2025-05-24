@@ -11,7 +11,7 @@ if 'product' not in st.session_state:
     st.session_state.product = 'Ice Cream Tub(Breyers)'
     print('product not in session state')
 if 'test_group' not in st.session_state:
-    st.session_state.test_group = 'A22_icecream_partly_demo_gender'
+    st.session_state.test_group = 'A23_icecream_partly_demo_income'
     st.session_state.excel_team = 'Condition_3_one_var'
     # test_group = 'A2_icecream_one_demo'
     # test_group = 'A3_icecream_no_demo'
@@ -69,8 +69,8 @@ def main():
                 mask = (
                     (df['team'] == st.session_state.excel_team) &
                     # (df['Age_Range'] == age)
-                    (df['Gender'] == gender)
-                    # (df['Household_Income'] == income) & 
+                    #  (df['Gender'] == gender)
+                    (df['Household_Income'] == income)
                     # (df['Ethnicity'] == ethnicity) &
                     # (df['product'] == st.session_state.product)
                 )
