@@ -11,8 +11,8 @@ if 'product' not in st.session_state:
     st.session_state.product = 'Ice Cream Tub(Breyers)'
     print('product not in session state')
 if 'test_group' not in st.session_state:
-    st.session_state.test_group = 'A24_icecream_partly_demo_ethnicity'
-    st.session_state.excel_team = 'Condition_3_one_var'
+    st.session_state.test_group = 'A3_icecream_no_demo'
+    st.session_state.excel_team = 'Condition_2'
     # test_group = 'A2_icecream_one_demo'
     # test_group = 'A3_icecream_no_demo'
     # test_group = 'A4_icecream_human_ad'
@@ -71,7 +71,7 @@ def main():
                     # (df['Age_Range'] == age)
                     #  (df['Gender'] == gender)
                     # (df['Household_Income'] == income)
-                    (df['Ethnicity'] == ethnicity) &
+                    # (df['Ethnicity'] == ethnicity) &
                     (df['product'] == st.session_state.product)
                 )
                 sids = df.loc[mask, 'sid'].tolist()
