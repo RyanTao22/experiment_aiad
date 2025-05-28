@@ -19,7 +19,7 @@ def main():
         st.session_state.watching_video = True
 
     if st.session_state.watching_video:
-        if st.button("Click Here when you have finished watching the complete video with sound", type="primary"):
+        if st.button("Click Here when you have finished watching the complete video ad with sound", type="primary"):
             st.session_state.user_time_spent = time.time() - st.session_state.page_load_time
             if st.session_state.user_time_spent >= st.session_state.data_dict["Video_time"]-2:
                 st.session_state.video_finished = True
