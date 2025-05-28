@@ -4,6 +4,7 @@ import pytz
 import pandas as pd
 import ast
 import time
+import random
 from sqlalchemy import create_engine
 #from helpers import add_row_to_responses_df, initialize_responses_df
 
@@ -11,11 +12,12 @@ if 'product' not in st.session_state:
     st.session_state.product = 'Ice Cream Tub(Breyers)'
     print('product not in session state')
 if 'test_group' not in st.session_state:
-    st.session_state.test_group = 'A3_icecream_no_demo'
-    st.session_state.excel_team = 'Condition_2'
+    st.session_state.test_group = 'A4_icecream_human_ad'
+    st.session_state.excel_team = 'Condition_1'
     # test_group = 'A2_icecream_one_demo'
     # test_group = 'A3_icecream_no_demo'
     # test_group = 'A4_icecream_human_ad'
+    
 
 def main():
     # st.write(st.session_state)
@@ -77,7 +79,12 @@ def main():
                 sids = df.loc[mask, 'sid'].tolist()
                 print(sids)
                 if len(sids) > 0:
-                    sid = int(sids[0])
+                    # for human ad group only
+                    if st.session_state.excel_team == 'Condition_1':
+                        sid = int(random.choice(sids))
+                    else:
+                        sid = int(sids[0])
+                    
                     prompt = df.loc[df['sid'] == sid, 'prompt'].values[0]
                     script = df.loc[df['sid'] == sid, 'refine_script'].values[0]
 
