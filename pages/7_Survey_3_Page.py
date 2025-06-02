@@ -1,8 +1,23 @@
 import streamlit as st
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 import pandas as pd
 import time
 import random
+
+def update_group_completion(conn, product, test_group_name):
+    # update the group completion count and timestamp, check if the group is completed
+    update_query = text("""
+    UPDATE group_counts 
+    SET current_count = current_count + 1,
+        is_done = CASE WHEN current_count + 1 >= max_count THEN TRUE ELSE FALSE END,
+        last_update_timestamp = NOW()
+    WHERE product = :product AND test_group_name = :test_group_name
+    """)
+    
+    conn.execute(update_query, {
+        "product": product, 
+        "test_group_name": test_group_name
+    })
 
 def main():
     if 'attn_attempts' not in st.session_state:
@@ -210,6 +225,7 @@ def main():
         st.session_state.shuffled_questions_part2 = shuffled_part2
 
     st.subheader("Survey 3 - Part 1 (9 questions)")
+    st.write("Please answer the questions based on your knowledge. You don't need to search on the internet or use any tools for the answers.")
     answers_part1 = {}
     for question in st.session_state.shuffled_questions_part1:
         answer = st.radio(
@@ -223,6 +239,7 @@ def main():
     st.divider()
 
     st.subheader("Survey 3 - Part 2 (9 questions)")
+    st.write("Please answer the questions based on your knowledge. You don't need to search on the internet or use any tools for the answers.")
     answers_part2 = {}
     for question in st.session_state.shuffled_questions_part2:
         answer = st.radio(
@@ -275,6 +292,10 @@ def main():
                                 'reason': 'completed the study'
                             }])
                         df_user.to_sql(name=st.secrets["db_check_user"], con=conn, if_exists='append', index=False)
+                    
+                        # update the group completion count and timestamp(only when the study is completed)
+                        update_group_completion(conn, st.session_state.product, st.session_state.test_group)
+                    
                     st.session_state.survey_2_complete = True
                     print('submitted')
 

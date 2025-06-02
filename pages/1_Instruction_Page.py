@@ -1,6 +1,43 @@
 import streamlit as st
 from sqlalchemy import create_engine, text
 import pandas as pd
+import ast
+
+def assign_user_to_group(engine):
+   
+    with engine.begin() as conn:
+        # find the group with the least number of users and the earliest last_update_timestamp
+        query = text("""
+        SELECT test_group_name, filter_fields, excel_team, product FROM group_counts 
+        WHERE is_done = FALSE
+        ORDER BY current_count ASC, last_update_timestamp ASC 
+        LIMIT 1
+        """)
+        
+        result = conn.execute(query).fetchone()
+        
+        if result:
+            test_group_name = result[0]
+            filter_fields = result[1]
+            excel_team = result[2]
+            product = result[3]
+
+            # update the timestamp
+            update_query = text("""
+            UPDATE group_counts 
+            SET last_update_timestamp = NOW()
+            WHERE product = :product AND test_group_name = :test_group_name
+            """)
+            
+            conn.execute(update_query, {
+                "product": product, 
+                "test_group_name": test_group_name
+            })
+            
+            return product, test_group_name, excel_team, filter_fields
+        else:
+            # if all groups are completed, return None
+            return None, None, None, None
 
 def main():
 
@@ -87,6 +124,23 @@ def main():
 
                     st.session_state.prolific_id = prolific_id
                     st.session_state.comp_check_passed = True
+                    
+                    # assign user to the group
+                    product, test_group_name, excel_team, filter_fields = assign_user_to_group(engine)
+            
+                    if test_group_name is None:
+                        st.error("According to our dataset, the experiment quote is full. We are sorry for the inconvenience. Please close the browser and return to Prolific.")
+                        st.stop()
+                    
+                    # store the group information to session state
+                    st.session_state.product = product
+                    st.session_state.test_group = test_group_name
+                    st.session_state.excel_team = excel_team
+                    st.session_state.filter_fields = ast.literal_eval(filter_fields) if filter_fields else []
+                    
+                    # display the allocation result (optional, for debugging)
+                    print(f"DEBUG: User {prolific_id} have been assigned to the experiment group: {test_group_name}")
+
                     st.success("✓ Correct! You may now begin the study.")
                     st.balloons()
                 else:
@@ -115,4 +169,4 @@ def main():
             st.switch_page("pages/2_Device_Check_Page.py")
 
 if __name__ == "__main__":
-    main()
+    main()  

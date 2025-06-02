@@ -6,23 +6,10 @@ import ast
 import time
 import random
 from sqlalchemy import create_engine
-#from helpers import add_row_to_responses_df, initialize_responses_df
-
-if 'product' not in st.session_state:
-    st.session_state.product = 'Ice Cream Tub(Breyers)'
-    print('product not in session state')
-if 'test_group' not in st.session_state:
-    st.session_state.test_group = 'A4_icecream_human_ad'
-    st.session_state.excel_team = 'Condition_1'
-    # test_group = 'A2_icecream_one_demo'
-    # test_group = 'A3_icecream_no_demo'
-    # test_group = 'A4_icecream_human_ad'
-    
 
 def main():
     # st.write(st.session_state)
 
-    
     if 'survey_complete' not in st.session_state:
         st.session_state.survey_complete = False
         st.session_state.attn3_attempts = 0
@@ -68,21 +55,35 @@ def main():
                 LA_time = datetime.datetime.now(pytz.timezone('America/Los_Angeles')).strftime('%Y-%m-%d %H:%M:%S')
                 
                 df = pd.read_excel('data/ad_ts_refine_script_df_250203.xlsx')
+                
+                # 构建动态筛选条件
                 mask = (
                     (df['team'] == st.session_state.excel_team) &
-                    # (df['Age_Range'] == age)
-                    #  (df['Gender'] == gender)
-                    # (df['Household_Income'] == income)
-                    # (df['Ethnicity'] == ethnicity) &
                     (df['product'] == st.session_state.product)
                 )
+                
+                # 根据filter_fields动态添加筛选条件
+                if hasattr(st.session_state, 'filter_fields') and st.session_state.filter_fields:
+                    field_value_map = {
+                        'Age_Range': age,
+                        'Gender': gender,
+                        'Household_Income': income,
+                        'Ethnicity': ethnicity
+                    }
+                    
+                    for field in st.session_state.filter_fields:
+                        if field in field_value_map and field_value_map[field] is not None:
+                            mask = mask & (df[field] == field_value_map[field])
+                
                 sids = df.loc[mask, 'sid'].tolist()
                 print(sids)
                 if len(sids) > 0:
-                    # for human ad group only
+                    
                     if st.session_state.excel_team == 'Condition_1':
+                        # for human ad group only
                         sid = int(random.choice(sids))
                     else:
+                        # for other groups
                         sid = int(sids[0])
                     
                     prompt = df.loc[df['sid'] == sid, 'prompt'].values[0]
@@ -119,6 +120,7 @@ def main():
                 #add_row_to_responses_df(row_data)
                 st.session_state.data_dict = data_dict
                 st.session_state.survey_complete = True
+                
                 st.switch_page("pages/4_Video_Ad_Page.py")
             else:
                 st.session_state.attn3_attempts += 1
