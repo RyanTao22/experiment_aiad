@@ -129,7 +129,7 @@ def main():
                     product, test_group_name, excel_team, filter_fields = assign_user_to_group(engine)
             
                     if test_group_name is None:
-                        st.error("According to our dataset, the experiment quote is full. We are sorry for the inconvenience. Please close the browser and return to Prolific.")
+                        st.error("According to our dataset, the experiment quote is full. We are sorry for the inconvenience this may cause. Please close the browser and return to Prolific.")
                         st.stop()
                     
                     # store the group information to session state

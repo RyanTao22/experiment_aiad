@@ -225,7 +225,7 @@ def main():
         st.session_state.shuffled_questions_part2 = shuffled_part2
 
     st.subheader("Survey 3 - Part 1 (9 questions)")
-    st.write("Please answer the questions based on your knowledge. You don't need to search on the internet or use any tools for the answers.")
+    st.info("Please answer the questions based on your current understanding. If unsure, give your best estimate rather than searching for answers or using any tools for the answers. ")
     answers_part1 = {}
     for question in st.session_state.shuffled_questions_part1:
         answer = st.radio(
@@ -239,7 +239,7 @@ def main():
     st.divider()
 
     st.subheader("Survey 3 - Part 2 (9 questions)")
-    st.write("Please answer the questions based on your knowledge. You don't need to search on the internet or use any tools for the answers.")
+    st.info("Please answer the questions based on your current understanding. If unsure, give your best estimate rather than searching for answers or using any tools for the answers. ")
     answers_part2 = {}
     for question in st.session_state.shuffled_questions_part2:
         answer = st.radio(
