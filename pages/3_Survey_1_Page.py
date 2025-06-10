@@ -89,7 +89,7 @@ def main():
                     prompt = df.loc[df['sid'] == sid, 'prompt'].values[0]
                     script = df.loc[df['sid'] == sid, 'refine_script'].values[0]
 
-                    video_df = pd.read_excel('data/bgm_combined_results_df_250203_part1.xlsx')
+                    video_df = pd.read_excel('data/bgm_combined_results_df_250203.xlsx')
                     video_df['sid'] = video_df['sid'].astype(int)
                     video_df['narrator_start_timestamps'] = video_df['narrator_start_timestamps'].apply(ast.literal_eval)
                     video_df['narrator_durations'] = video_df['narrator_durations'].apply(ast.literal_eval)
