@@ -22,6 +22,9 @@ elif page_selection == "Score the Video":
     if st.session_state.video_finished:       st.switch_page("pages/5_Score_Video_Page.py")
     else: st.warning("Please complete the survey and watch the video first")
 elif page_selection == "Survey 2":
-    if st.session_state.score_video_complete: st.switch_page("pages/6_Survey_2_Page.py")
+    if st.session_state.score_submitted: st.switch_page("pages/6_Survey_2_Page.py")
     else: st.warning("Please complete the device check first")
+elif page_selection == "Survey 3":
+    if st.session_state.survey2_submitted:    st.switch_page("pages/7_Survey_3_Page.py")
+    else: st.warning("Please complete the survey 2 first")
 

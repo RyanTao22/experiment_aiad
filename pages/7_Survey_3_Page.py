@@ -22,7 +22,7 @@ def update_group_completion(conn, product, test_group_name):
 def main():
     if 'attn_attempts' not in st.session_state:
         st.session_state.attn_attempts = 0
-        st.session_state.survey_2_complete = False
+        st.session_state.survey_3_submitted = False
 
     # 定义问题和选项
     questions_part1 = [
@@ -280,7 +280,7 @@ def main():
                 st.session_state.data_dict['ryan2_3'] = all_answers["ryan2_3"]
                 st.session_state.data_dict['ryan2_4'] = all_answers["ryan2_4"]
 
-                if not st.session_state.survey_2_complete:
+                if not st.session_state.survey_3_submitted:
                     engine = create_engine(f'mysql+pymysql://{st.secrets["username"]}:{st.secrets["password"]}@{st.secrets["db_url"]}:{st.secrets["port"]}/{st.secrets["database"]}?charset=utf8mb4')
                     with engine.begin() as conn:
                         df = pd.DataFrame.from_dict([st.session_state.data_dict])
@@ -296,7 +296,7 @@ def main():
                         # update the group completion count and timestamp(only when the study is completed)
                         update_group_completion(conn, st.session_state.product, st.session_state.test_group)
                     
-                    st.session_state.survey_2_complete = True
+                    st.session_state.survey_3_submitted = True
                     print('submitted')
 
                 
