@@ -1,104 +1,76 @@
 import streamlit as st
 
+# Page to record the willingness to pay for the product using the slider
+
 def main():
     if 'survey2_submitted' not in st.session_state:
         st.session_state.survey2_submitted = False
 
-    st.subheader("Survey 2 (4 questions)")
+    st.subheader("Survey 2")
+
+# Product 	Price Range	 granularity
+# Toothpaste(Colgate)   $0-8	every $0.01
+# Ice Cream Tub(Breyers)  $0-10	every $0.01
+# Wine(Harlan Estate)   $0-3120	every $1
+# Laptop(MacBook)  $0-2890	every $1
 
     score_descriptions = {
-        "ai_attitude": {
-            1: "Very Negative",
-            2: "Negative",
-            3: "Somewhat Negative",
-            4: "Neutral",
-            5: "Somewhat Positive",
-            6: "Positive",
-            7: "Very Positive"
+        "toothpaste_willingness_to_pay": {
+            'min': 0.0,
+            'max': 8.0,
+            'granularity': 0.01
         },
-        "ai_probability": {
-            1: "Certainly Human",
-            2: "Likely Human",
-            3: "Possibly Human",
-            4: "Unsure",
-            5: "Possibly AI",
-            6: "Likely AI",
-            7: "Certainly AI"
+        "ice_cream_tub_willingness_to_pay": {
+            'min': 0.0,
+            'max': 10.0,
+            'granularity': 0.01
         },
-        "ai_ad_acceptance": {
-            1: "Very Unacceptable",
-            2: "Unacceptable",
-            3: "Somewhat Unacceptable",
-            4: "Neutral",
-            5: "Somewhat Acceptable",
-            6: "Acceptable",
-            7: "Very Acceptable"
+        "wine_willingness_to_pay": {
+            'min': 0,
+            'max': 3000,
+            'granularity': 1
         },
-        "ai_ad_personalized_acceptance": {
-            1: "Very Unacceptable",
-            2: "Unacceptable",
-            3: "Somewhat Unacceptable",
-            4: "Neutral",
-            5: "Somewhat Acceptable",
-            6: "Acceptable",
-            7: "Very Acceptable"
+        "laptop_willingness_to_pay": {
+            'min': 0,
+            'max': 3000,
+            'granularity': 1
         }
     }
     
-    def create_question(label, descriptions_dict, key):
+    def create_question(descriptions_dict, key):
         score = st.slider(
-            f"""{label} 
-            \n(1 = {descriptions_dict[1]}  |  4 = {descriptions_dict[4]}  |  7 = {descriptions_dict[7]})""",
-            min_value=1,
-            max_value=7,
-            value=None,
+            f"""What is your maximum willingness to pay for the product? (in USD)
+            """,
+            min_value=descriptions_dict['min'],
+            max_value=descriptions_dict['max'],
+            value=descriptions_dict['min'],
+            step=descriptions_dict['granularity'],
             key=key
         )
         if score is not None:
-            st.caption(f"Selected {score} - {descriptions_dict[score]}")
+            st.caption(f"Current choice: ${score}")
         return score
     
     if not st.session_state.survey2_submitted:
-        # 定义问题列表
-        questions = [
-            {
-                "label": "What is your overall attitude towards AI technology?",
-                "key": "ai_attitude",
-                "descriptions": score_descriptions["ai_attitude"]
-            },
-            {
-                "label": "How likely was this advertisement Human-generated or AI-generated?",
-                "key": "ai_probability",
-                "descriptions": score_descriptions["ai_probability"]
-            },
-            {
-                "label": "How acceptable do you find AI-generated advertising?",
-                "key": "ai_ad_acceptance",
-                "descriptions": score_descriptions["ai_ad_acceptance"]
-            },
-            {
-                "label": "How acceptable do you find AI-generated advertisements that are personalized based on your demographics?",
-                "key": "ai_ad_personalized_acceptance",
-                "descriptions": score_descriptions["ai_ad_personalized_acceptance"]
-            }
-        ]
+        if st.session_state.product == "Toothpaste(Colgate)":
+            key = "toothpaste_willingness_to_pay"
+        elif st.session_state.product == "Ice Cream Tub(Breyers)":
+            key = "ice_cream_tub_willingness_to_pay"
+        elif st.session_state.product == "Wine(Harlan Estate)":
+            key = "wine_willingness_to_pay"
+        elif st.session_state.product == "Laptop(MacBook)":
+            key = "laptop_willingness_to_pay"
         
-        # 存储答案的字典
-        answers = {}
-        
-        # 显示问题
-        for q in questions:
-            score = create_question(
-                q["label"],
-                q["descriptions"],
-                q["key"]
-            )
-            answers[q["key"]] = score
+        score = create_question(
+            score_descriptions[key],
+            key
+        )
+       
         
         # Submission section
-        if st.button("Submit Assessment", type="primary"):
-            if None not in answers.values():
-                st.session_state.data_dict.update(answers)
+        if st.button("Submit", type="primary"):
+            if score is not None:
+                st.session_state.data_dict['willingness_to_pay'] = score
                 st.session_state.survey2_submitted = True
                 st.success("Responses recorded successfully!")
                 st.switch_page("pages/7_Survey_3_Page.py")

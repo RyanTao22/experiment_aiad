@@ -27,4 +27,7 @@ elif page_selection == "Survey 2":
 elif page_selection == "Survey 3":
     if st.session_state.survey2_submitted:    st.switch_page("pages/7_Survey_3_Page.py")
     else: st.warning("Please complete the survey 2 first")
+elif page_selection == "Survey 4":
+    if st.session_state.survey3_submitted:    st.switch_page("pages/8_Survey_4_Page.py")
+    else: st.warning("Please complete the survey 3 first")
 
