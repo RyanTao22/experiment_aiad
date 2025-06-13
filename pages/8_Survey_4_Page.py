@@ -8,8 +8,8 @@ def update_group_completion(conn, product, test_group_name):
     # update the group completion count and timestamp, check if the group is completed
     update_query = text("""
     UPDATE group_counts 
-    SET current_count = current_count + 1,
-        is_done = CASE WHEN current_count + 1 >= max_count THEN TRUE ELSE FALSE END,
+    SET is_done = CASE WHEN current_count + 1 >= max_count THEN TRUE ELSE FALSE END,
+        current_count = current_count + 1,
         last_update_timestamp = NOW()
     WHERE product = :product AND test_group_name = :test_group_name
     """)

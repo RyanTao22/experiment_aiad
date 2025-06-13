@@ -17,7 +17,7 @@ def main():
     score_descriptions = {
         "toothpaste_willingness_to_pay": {
             'min': 0.0,
-            'max': 8.0,
+            'max': 10.0,
             'granularity': 0.01
         },
         "ice_cream_tub_willingness_to_pay": {
