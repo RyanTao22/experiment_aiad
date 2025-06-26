@@ -1,2 +1,5 @@
 .streamlit
 .DS_Store
+full_compare_test.py
+.devcontainer
+__pycache__

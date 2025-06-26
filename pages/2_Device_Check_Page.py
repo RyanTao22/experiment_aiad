@@ -1,5 +1,5 @@
 import streamlit as st
-from sqlalchemy import create_engine
+from app_utils import get_engine
 import pandas as pd
 
 def main():
@@ -52,7 +52,7 @@ def main():
             if st.session_state.device_attempts >= 2:
                 st.session_state.device_test_passed = False
                 # 记录失败状态到数据库
-                engine = create_engine(f'mysql+pymysql://{st.secrets["username"]}:{st.secrets["password"]}@{st.secrets["db_url"]}:{st.secrets["port"]}/{st.secrets["database"]}?charset=utf8mb4')
+                engine = get_engine()
                 with engine.begin() as conn:
                     df = pd.DataFrame([{
                         'prolific_id': st.session_state.prolific_id,
@@ -71,7 +71,7 @@ def main():
             if st.session_state.device_attempts >= 2:
                 st.session_state.device_test_passed = False
                 # 记录失败状态到数据库
-                engine = create_engine(f'mysql+pymysql://{st.secrets["username"]}:{st.secrets["password"]}@{st.secrets["db_url"]}:{st.secrets["port"]}/{st.secrets["database"]}?charset=utf8mb4')
+                engine = get_engine()
                 with engine.begin() as conn:
                     df = pd.DataFrame([{
                         'prolific_id': st.session_state.prolific_id,

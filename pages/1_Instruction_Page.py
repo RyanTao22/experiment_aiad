@@ -1,5 +1,6 @@
 import streamlit as st
-from sqlalchemy import create_engine, text
+from sqlalchemy import text
+from app_utils import get_engine
 import pandas as pd
 import ast
 
@@ -91,7 +92,7 @@ def main():
         if st.button("Submit Answer"):
             if prolific_id:
                 # 检查prolific_id是否在db_check_user表中
-                engine = create_engine(f'mysql+pymysql://{st.secrets["username"]}:{st.secrets["password"]}@{st.secrets["db_url"]}:{st.secrets["port"]}/{st.secrets["database"]}?charset=utf8mb4')
+                engine = get_engine()
                 with engine.connect() as conn:
                     query = text(f"SELECT reason FROM {st.secrets['db_check_user']} WHERE prolific_id = :prolific_id")
                     result = conn.execute(query, {"prolific_id": prolific_id}).fetchone()
