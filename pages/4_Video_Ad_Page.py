@@ -77,33 +77,35 @@ def main():
                     st.error("You haven't watched the video long enough. Please click the button 'I confirm - I will watch the complete video with sound' to watch the complete video again before proceeding.")
 
         # 已通过时长校验 -> 隐藏按钮，显示 slider
-        if st.session_state.video_finished and not st.session_state.willingness_to_pay_submitted:
-            if st.session_state.product == "Toothpaste(Colgate)":
-                key = "toothpaste_willingness_to_pay"
-            elif st.session_state.product == "Ice Cream Tub(Breyers)":
-                key = "ice_cream_tub_willingness_to_pay"
-            elif st.session_state.product == "Wine(Harlan Estate)":
-                key = "wine_willingness_to_pay"
-            elif st.session_state.product == "Laptop(MacBook)":
-                key = "laptop_willingness_to_pay"
+        if not st.session_state.willingness_to_pay_submitted:
+            if st.session_state.video_finished:
+                if st.session_state.product == "Toothpaste(Colgate)":
+                    key = "toothpaste_willingness_to_pay"
+                elif st.session_state.product == "Ice Cream Tub(Breyers)":
+                    key = "ice_cream_tub_willingness_to_pay"
+                elif st.session_state.product == "Wine(Harlan Estate)":
+                    key = "wine_willingness_to_pay"
+                elif st.session_state.product == "Laptop(MacBook)":
+                    key = "laptop_willingness_to_pay"
 
-            
+                
 
-            score = create_question(
-                score_descriptions[key],
-                key)
+                score = create_question(
+                    score_descriptions[key],
+                    key)
 
-            # 提交按钮区域
-            st.divider()
-            _, _, _, col_mid, _, _, _ = st.columns([1, 1, 1, 1, 1, 1, 1])
-            with col_mid:
-                if st.button("Submit", type="primary"):
-                    if score is not None:
-                        st.session_state.data_dict['willingness_to_pay'] = score
-                        st.session_state.willingness_to_pay_submitted = True
-                        st.switch_page("pages/5_Score_Video_Page.py")
-                    else:
-                        st.error("Please complete the question before submitting")
+                # 提交按钮区域
+                st.divider()
+                _, _, _, col_mid, _, _, _ = st.columns([1, 1, 1, 1, 1, 1, 1])
+                if score is not None:
+                    with col_mid:
+                        if st.button("Submit", type="primary"):
+                            if score is not None:
+                                st.session_state.data_dict['willingness_to_pay'] = score
+                                st.session_state.willingness_to_pay_submitted = True
+                                st.switch_page("pages/5_Score_Video_Page.py")
+                            else:
+                                st.error("Please complete the question before submitting")
         else:
             st.success("Responses recorded successfully!")
             if st.button("Continue to Next Section", type="primary"):
