@@ -261,7 +261,7 @@ def main():
                     st.warning('You have failed to pass the Attention Checks. Thank you for your time. Please close the browser and return to Prolific.')
                     st.stop()
                 else:
-                    st.error("Incorrect answer/answers detected. Please review all of your answers and try again.")
+                    st.error("Incorrect Attention Check answer/answers detected. Please review all of your answers and try again.")
 
 if __name__ == "__main__":
     if 'survey2_submitted' not in st.session_state or not st.session_state.survey2_submitted:
