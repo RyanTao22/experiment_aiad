@@ -200,8 +200,17 @@ def main():
             st.error("Please answer all questions before saving.") 
         else:
             if all_answers["attn1"] == "Strongly disagree" and all_answers["attn2"] == "Green":  
-                if st.session_state.attn_attempts >= 2:  
-                    st.warning('You have failed to pass the Attention Checks. Thank you for your time. Please close the browser and return to Prolific.')
+                if st.session_state.attn_attempts >= 2:
+                    engine = get_engine()
+                    with engine.begin() as conn:
+                            df = pd.DataFrame([{
+                                'prolific_id': st.session_state.prolific_id,
+                                'status': 'failed',
+                                'reason': 'attention_check'
+                            }])
+                            df.to_sql(name=st.secrets["db_check_user"], con=conn, if_exists='append', index=False)
+                    
+                    st.warning('You have failed to pass the Attention Checks too many times. Thank you for your time. Please close the browser and return to Prolific.')
                     st.stop()
                 
                 st.session_state.data_dict['table1_7'] = all_answers["q1_7"]
